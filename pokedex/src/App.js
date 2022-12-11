@@ -26,19 +26,11 @@ function App() {
     const pokemonData = await response.json();
     console.log(pokemonData);
 
-    const getPokemonType = (typesObj) => {
-      let types = [];
-      for (let i = 0; i < typesObj.length; i++) {
-        types.push(typesObj[i].type.name);
-      }
-      return types;
-    };
-
     setPokemon({
       name: pokemonName,
       id: pokemonData.id,
       img: pokemonData.sprites.front_default,
-      type: getPokemonType(pokemonData.types),
+      type: pokemonData.types.map((typeValue) => typeValue.type.name), //array
       hp: pokemonData.stats[0].base_stat,
       attack: pokemonData.stats[1].base_stat,
       defense: pokemonData.stats[2].base_stat,
