@@ -1,5 +1,6 @@
 import "./App.css";
 import React, { useState } from "react";
+import EvoChainComponent from "./components/evoChain";
 
 function App() {
   const [pokemonName, setPokemonName] = useState("");
@@ -8,7 +9,7 @@ function App() {
     name: "",
     id: "",
     img: "",
-    type: "",
+    type: [],
     hp: "",
     attack: "",
     defense: "",
@@ -17,31 +18,37 @@ function App() {
     speed: "",
     height: "",
     weight: "",
+    speciesAPI: "",
   });
 
   const searchPokemon = async () => {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
-    );
-    const pokemonData = await response.json();
-    console.log(pokemonData);
+    try {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
+      );
+      const pokemonData = await response.json();
+      console.log(pokemonData);
 
-    setPokemon({
-      name: pokemonName,
-      id: pokemonData.id,
-      img: pokemonData.sprites.front_default,
-      type: pokemonData.types.map((typeValue) => typeValue.type.name), //array
-      hp: pokemonData.stats[0].base_stat,
-      attack: pokemonData.stats[1].base_stat,
-      defense: pokemonData.stats[2].base_stat,
-      spAttack: pokemonData.stats[3].base_stat,
-      spDefense: pokemonData.stats[4].base_stat,
-      speed: pokemonData.stats[5].base_stat,
-      height: pokemonData.height / 10, //meters
-      weight: pokemonData.weight / 10, //kg
-    });
+      setPokemon({
+        name: pokemonName,
+        id: pokemonData.id,
+        img: pokemonData.sprites.front_default,
+        type: pokemonData.types.map((typeValue) => typeValue.type.name), //array
+        hp: pokemonData.stats[0].base_stat,
+        attack: pokemonData.stats[1].base_stat,
+        defense: pokemonData.stats[2].base_stat,
+        spAttack: pokemonData.stats[3].base_stat,
+        spDefense: pokemonData.stats[4].base_stat,
+        speed: pokemonData.stats[5].base_stat,
+        height: pokemonData.height / 10, //meters
+        weight: pokemonData.weight / 10, //kg
+        speciesAPI: pokemonData.species.url,
+      });
 
-    setPokemonChosen(true);
+      setPokemonChosen(true);
+    } catch {
+      setPokemonChosen(false);
+    }
   };
 
   return (
@@ -59,8 +66,25 @@ function App() {
           <h1>Search for a Pokemon</h1>
         ) : (
           <>
-            <h1>{pokemon.name}</h1>
+            <h1>
+              {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+            </h1>
+            <h3>Pokedex ID: {pokemon.id}</h3>
             <img src={pokemon.img} alt="" />
+            <div className="container">
+              <div className="stats">
+                <div>HP: {pokemon.hp}</div>
+                <div>Attack: {pokemon.attack}</div>
+                <div>Defense: {pokemon.defense}</div>
+                <div>Sp. Attack: {pokemon.spAttack}</div>
+                <div>Sp. Defense: {pokemon.spDefense}</div>
+                <div>Speed: {pokemon.speed}</div>
+              </div>
+              <div>Type: {pokemon.type.toString().split(",").join(" ")}</div>
+              <div>Height: {pokemon.height} m</div>
+              <div>Weight: {pokemon.weight} kg</div>
+            </div>
+            <EvoChainComponent speciesAPI={pokemon.speciesAPI} />
           </>
         )}
       </div>
