@@ -1,4 +1,4 @@
-import "./evoChain.css";
+import "./evoTree.css";
 import React, { useEffect, useState } from "react";
 
 /**
@@ -38,10 +38,10 @@ const makeEvoTree = (evoDataChain, evoTree = [], treeLevel = 0) => {
 };
 
 /**
- * React component to display evolution chain
+ * React component to display evolution tree
  * @component
  */
-const EvoChainComponent = ({ speciesAPI }) => {
+function EvoTreeComponent({ speciesAPI }) {
   const [evoTree, setEvoTree] = useState([]);
   const [makeTree, setMakeTree] = useState(false);
 
@@ -49,15 +49,16 @@ const EvoChainComponent = ({ speciesAPI }) => {
     getEvoData(speciesAPI).then((response) => {
       let evoTreeResponse = [];
       makeEvoTree(response, evoTreeResponse);
-
-      console.log(evoTreeResponse);
-
       setEvoTree(evoTreeResponse);
       setMakeTree(true);
     });
   }, [speciesAPI]);
 
-  //make this function not ugly
+  /**
+   * Generate JSX for evolution tree
+   * @param {Array} evoTree - Array of pokemon/treeLevel pairs
+   * @returns {JSX} - divs to display evolution tree
+   */
   const displayTree = (evoTree) => {
     let numLevels = 1;
     let evolutionLevelDivs = [];
@@ -93,6 +94,6 @@ const EvoChainComponent = ({ speciesAPI }) => {
       </div>
     </>
   );
-};
+}
 
-export default EvoChainComponent;
+export default EvoTreeComponent;

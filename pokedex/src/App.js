@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState } from "react";
-import EvoChainComponent from "./components/evoChain";
+import EvoTreeComponent from "./components/evoTree";
 
 function App() {
   const [pokemonName, setPokemonName] = useState("");
@@ -27,7 +27,6 @@ function App() {
         `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
       );
       const pokemonData = await response.json();
-      console.log(pokemonData);
 
       setPokemon({
         name: pokemonName,
@@ -54,7 +53,7 @@ function App() {
   return (
     <div className="App">
       <div className="TitleSection">
-        <h1>Pokemon Stats</h1>
+        <h1>Pokedex</h1>
         <input
           type="text"
           onChange={(event) => setPokemonName(event.target.value.toLowerCase())}
@@ -84,7 +83,7 @@ function App() {
               <div>Height: {pokemon.height} m</div>
               <div>Weight: {pokemon.weight} kg</div>
             </div>
-            <EvoChainComponent speciesAPI={pokemon.speciesAPI} />
+            <EvoTreeComponent speciesAPI={pokemon.speciesAPI} />
           </>
         )}
       </div>
